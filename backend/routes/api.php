@@ -20,4 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('user', UserController::class);
+$router->group(['prefix' => 'user'], function ($router) {
+    $router->post('/store', [UserController::class, 'store']);
+    $router->post('/update/{id}', [UserController::class, 'update']);
+});
+
