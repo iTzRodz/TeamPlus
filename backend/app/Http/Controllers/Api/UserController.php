@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -27,26 +30,28 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $validated = Validator::make($request->all(), [
-            'name' => 'required|max:255|min:1',
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password)
+            ]);
 
-        if ($validated->fails()) {
             return response()->json([
-                'message' => 'Your request is missing data'
-            ], 400);
+                'message' => 'User created successfully',
+                'User' => $user
+            ], 201);
+        } catch (\Exception $ex) {
+            $exception = [
+                'Message' => $ex->getMessage(),
+                'Code' => $ex->getCode(),
+                'Exception' => $ex->__toString()
+            ];
+
+            return response()->json($exception, 500);
         }
-
-        $users = User::create($request->all());
-
-        return response()->json([
-            'message' => 'User created successfully',
-            'User' => $users
-        ], 201);
     }
 
     /**
@@ -70,24 +75,29 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UserUpdateRequest $request, $userId)
     {
-        $validated = Validator::make($request->all(), [
-            'name' => 'max:255'
-        ]);
 
-        if ($validated->fails()) {
+        try {
+            $user = User::find($userId);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->save();
+
             return response()->json([
-                'message' => 'Your request is missing data'
-            ], 400);
+                'message' => 'User updated successfully',
+                'User' => $user
+            ], 201);
+        } catch (\Exception $ex) {
+            $exception = [
+                'Message' => $ex->getMessage(),
+                'Code' => $ex->getCode(),
+                'Exception' => $ex->__toString()
+            ];
+
+            return response()->json($exception, 500);
         }
-
-        $user->update($request->all());
-
-        return response()->json([
-            'message' => 'User updated successfully',
-            'User' => $user
-        ], 200);
     }
 
     /**
