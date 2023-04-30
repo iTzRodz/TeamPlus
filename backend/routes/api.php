@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+$router->group(['prefix' => 'user'], function ($router) {
+    $router->post('/store', [UserController::class, 'store']);
+    $router->post('/update/{id}', [UserController::class, 'update']);
+});
+
