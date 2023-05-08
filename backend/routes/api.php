@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 
 /*
@@ -37,3 +37,5 @@ $router->group(['prefix' => 'user'], function ($router) {
     $router->post('/store', [UserController::class, 'store']);
     $router->post('/update/{id}', [UserController::class, 'update']);
 });
+
+
