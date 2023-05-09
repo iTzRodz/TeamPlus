@@ -14,7 +14,7 @@ import appStore from "../assets/AppStore.svg";
 export function LandingPage() {
   return (
     <div className="h-screen w-screen max-w-full">
-      <div className=" bg-[#346DFF] flex items-center justify-around p-3 ">
+      <div className=" bg-[#5686FF] flex items-center justify-around p-3 ">
         <Image src={logoTeamPlus} alt="Team Plus Logo" />
 
         <nav className="flex gap-4">
@@ -50,7 +50,7 @@ export function LandingPage() {
         </div>
       </div>
 
-      <div className=" bg-[#EDEDED] w-2/3 mx-auto mt-16">
+      <div className=" bg-[#EDEDED] w-2/3 mx-auto mt-36">
         <div className=" flex  items-center justify-center gap-6">
           <Image
             src={mobileTeamPlus}
